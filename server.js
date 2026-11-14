@@ -8,7 +8,6 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-
 app.post('/usuarios', async (req, res) => {
   try {
     const { nome, email } = req.body
@@ -27,7 +26,6 @@ app.post('/usuarios', async (req, res) => {
     res.status(500).json({ erro: 'erro ao cadastrar usuario' })
   }
 })
-
 
 app.get('/usuarios', async (req, res) => {
   try {
@@ -55,25 +53,6 @@ app.put('/usuarios/:id', async (req, res) => {
     res.status(200).json({ mensagem: 'usuario atualizado com sucesso' })
   } catch (erro) {
     res.status(500).json({ erro: 'erro ao atualizar usuario' })
-  }
-})
-
-app.delete('/usuarios/:id', async (req, res) => {
-  try {
-    const { id } = req.params
-
-    const [resultado] = await pool.query(
-      'DELETE FROM usuarios WHERE id = ?',
-      [id]
-    )
-
-    if (resultado.affectedRows === 0) {
-      return res.status(404).json({ erro: 'usuario nao encontrado' })
-    }
-
-    res.status(200).json({ mensagem: 'usuario removido com sucesso' })
-  } catch (erro) {
-    res.status(500).json({ erro: 'erro ao remover usuario' })
   }
 })
 
