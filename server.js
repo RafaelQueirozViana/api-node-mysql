@@ -28,6 +28,16 @@ app.post('/usuarios', async (req, res) => {
   }
 })
 
+
+app.get('/usuarios', async (req, res) => {
+  try {
+    const [usuarios] = await pool.query('SELECT * FROM usuarios')
+    res.status(200).json(usuarios)
+  } catch (erro) {
+    res.status(500).json({ erro: 'erro ao listar usuarios' })
+  }
+})
+
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
