@@ -38,6 +38,26 @@ app.get('/usuarios', async (req, res) => {
   }
 })
 
+app.put('/usuarios/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const { nome, email } = req.body
+
+    const [resultado] = await pool.query(
+      'UPDATE usuarios SET nome = COALESCE(?, nome), email = COALESCE(?, email) WHERE id = ?',
+      [nome ?? null, email ?? null, id]
+    )
+
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({ erro: 'usuario nao encontrado' })
+    }
+
+    res.status(200).json({ mensagem: 'usuario atualizado com sucesso' })
+  } catch (erro) {
+    res.status(500).json({ erro: 'erro ao atualizar usuario' })
+  }
+})
+
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
